@@ -51,7 +51,7 @@ parts:
       craftctl set version="$cargo_version+git$(date +'%Y%m%d').$(git describe --always --exclude '*')"
   k26-default-bitstreams:
     plugin: rust
-    source: .
+    source: src
     rust-channel: 'stable'
     rust-path:
       - k26-default-bitstreams
