@@ -62,7 +62,7 @@ parts:
     build-packages:
       - xilinx-bootgen
     override-build: |
-      cd k26_starter_kits && bootgen -image k26_starter_kits.bif -arch zynqmp -o k26_starter_kits.bit.bin -w && cd ../
+      ( cd k26_starter_kits; bootgen -image k26_starter_kits.bif -arch zynqmp -o k26_starter_kits.bit.bin -w )
       install -Dm0644 -t $SNAPCRAFT_PART_INSTALL/data/k26-starter-kits \
         k26_starter_kits/k26_starter_kits.bit.bin \
         LICENSE-BINARIES
