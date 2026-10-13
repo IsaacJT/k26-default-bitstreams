@@ -23,6 +23,8 @@ plugs:
     interface: dbus
     bus: system
     name: com.canonical.fpgad
+  zynqmp-hwmon:
+    interface: custom-device
 slots:
   provided-content:
     interface: content
@@ -39,6 +41,18 @@ apps:
     restart-condition: always
     start-timeout: 30s
     install-mode: disable
+  fancontrol:
+    command: usr/sbin/fancontrol
+    daemon: simple
+    plugs:
+      - zynqmp-hwmon
+    restart-condition: always
+    restart-delay: 30s
+    install-mode: disable
+hooks:
+  configure:
+    environment:
+      PYTHONPATH: "$SNAP/usr/lib/python3/dist-packages/"
 parts:
   version:
     plugin: nil
@@ -66,3 +80,14 @@ parts:
       install -Dm0644 -t $SNAPCRAFT_PART_INSTALL/data/k26-starter-kits \
         k26_starter_kits/k26_starter_kits.bit.bin \
         LICENSE-BINARIES
+  fancontrol:
+    plugin: dump
+    source: fancontrol
+    stage-packages:
+      - fancontrol:${CRAFT_ARCH_BUILD_FOR}
+      - j2cli:${CRAFT_ARCH_BUILD_FOR}
+    organize:
+     fancontrol.j2: etc/fancontrol.j2
+layout:
+  /etc/fancontrol:
+    bind-file: $SNAP_DATA/fancontrol
